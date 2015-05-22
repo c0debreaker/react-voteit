@@ -1,17 +1,30 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var React         = require('react');
+var React = require('react');
 var ShowAddButton = require('./ShowAddButton');
-var FeedForm      = require('./FeedForm');
-var FeedList      = require('./FeedList');
-var _             = require('lodash');
+var FeedForm = require('./FeedForm');
+var FeedList = require('./FeedList');
+var _ = require('lodash');
 
 var Feed = React.createClass({displayName: "Feed",
 
-  getInitialState: function() {
+  getInitialState: function () {
     var FEED_ITEMS = [
-      {key: '1', title: 'JavaScript is fun', description: 'Lexical scoping FTW', voteCount: 34},
-      {key: '2', title: 'Realtime data!', description: 'Firebase is cool', voteCount: 49},
-      {key: '3', title: 'Coffee makes you awake', description: 'Drink responsibly', voteCount: 15},
+      {
+        key: '1',
+        title: 'JavaScript is fun',
+        description: 'Lexical scoping FTW',
+        voteCount: 34
+      }, {
+        key: '2',
+        title: 'Realtime data!',
+        description: 'Firebase is cool',
+        voteCount: 49
+      }, {
+        key: '3',
+        title: 'Coffee makes you awake',
+        description: 'Drink responsibly',
+        voteCount: 15
+      },
     ];
     return {
       items: FEED_ITEMS,
@@ -19,13 +32,13 @@ var Feed = React.createClass({displayName: "Feed",
     }
   },
 
-  onToggleForm: function() {
+  onToggleForm: function () {
     this.setState({
       formDisplayed: !this.state.formDisplayed
     });
   },
 
-  onNewItem: function(newItem) {
+  onNewItem: function (newItem) {
     var newItems = this.state.items.concat([newItem]);
     this.setState({
       items: newItems,
@@ -34,12 +47,10 @@ var Feed = React.createClass({displayName: "Feed",
     });
   },
 
-  onVote: function(item) {
-    console.log(item);
+  onVote: function (item) {
     var items = _.uniq(this.state.items);
-    var index = _.findIndex(items, function(feedItems) {
-      console.log(feedItems.key);
-      return feedItems.key;
+    var index = _.findIndex(items, function (feedItems) {
+      return feedItems.key === item.key;
     });
     var oldObj = items[index];
     var newItems = _.pull(items, oldObj);
@@ -49,21 +60,16 @@ var Feed = React.createClass({displayName: "Feed",
     });
   },
 
-  render: function() {
+  render: function () {
     return (
       React.createElement("div", null, 
-
         React.createElement("div", {className: "container"}, 
           React.createElement(ShowAddButton, {displayed: this.state.formDisplayed, onToggleForm: this.onToggleForm})
         ), 
-
         React.createElement(FeedForm, {displayed: this.state.formDisplayed, onNewItem: this.onNewItem}), 
-
         React.createElement("br", null), 
         React.createElement("br", null), 
-
         React.createElement(FeedList, {items: this.state.items, onVote: this.onVote})
-
       )
     );
   }
@@ -149,7 +155,7 @@ var FeedItem = React.createClass({displayName: "FeedItem",
                                     'badge badge-danger';
 
     return (
-      React.createElement("li", {className: "list-group-item"}, 
+      React.createElement("li", {key: this.props.key, className: "list-group-item"}, 
         React.createElement("span", {className: positiveNegativeClassName}, this.props.voteCount), 
         React.createElement("h4", null, this.props.title), 
         React.createElement("span", null, this.props.desc), 

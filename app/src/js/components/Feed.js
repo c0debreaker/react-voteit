@@ -1,16 +1,29 @@
-var React         = require('react');
+var React = require('react');
 var ShowAddButton = require('./ShowAddButton');
-var FeedForm      = require('./FeedForm');
-var FeedList      = require('./FeedList');
-var _             = require('lodash');
+var FeedForm = require('./FeedForm');
+var FeedList = require('./FeedList');
+var _ = require('lodash');
 
 var Feed = React.createClass({
 
-  getInitialState: function() {
+  getInitialState: function () {
     var FEED_ITEMS = [
-      {key: '1', title: 'JavaScript is fun', description: 'Lexical scoping FTW', voteCount: 34},
-      {key: '2', title: 'Realtime data!', description: 'Firebase is cool', voteCount: 49},
-      {key: '3', title: 'Coffee makes you awake', description: 'Drink responsibly', voteCount: 15},
+      {
+        key: '1',
+        title: 'JavaScript is fun',
+        description: 'Lexical scoping FTW',
+        voteCount: 34
+      }, {
+        key: '2',
+        title: 'Realtime data!',
+        description: 'Firebase is cool',
+        voteCount: 49
+      }, {
+        key: '3',
+        title: 'Coffee makes you awake',
+        description: 'Drink responsibly',
+        voteCount: 15
+      },
     ];
     return {
       items: FEED_ITEMS,
@@ -18,13 +31,13 @@ var Feed = React.createClass({
     }
   },
 
-  onToggleForm: function() {
+  onToggleForm: function () {
     this.setState({
       formDisplayed: !this.state.formDisplayed
     });
   },
 
-  onNewItem: function(newItem) {
+  onNewItem: function (newItem) {
     var newItems = this.state.items.concat([newItem]);
     this.setState({
       items: newItems,
@@ -33,12 +46,10 @@ var Feed = React.createClass({
     });
   },
 
-  onVote: function(item) {
-    console.log(item);
+  onVote: function (item) {
     var items = _.uniq(this.state.items);
-    var index = _.findIndex(items, function(feedItems) {
-      console.log(feedItems.key);
-      return feedItems.key;
+    var index = _.findIndex(items, function (feedItems) {
+      return feedItems.key === item.key;
     });
     var oldObj = items[index];
     var newItems = _.pull(items, oldObj);
@@ -48,21 +59,16 @@ var Feed = React.createClass({
     });
   },
 
-  render: function() {
+  render: function () {
     return (
       <div>
-
         <div className="container">
-          <ShowAddButton displayed={this.state.formDisplayed} onToggleForm={this.onToggleForm} />
+          <ShowAddButton displayed={this.state.formDisplayed} onToggleForm={this.onToggleForm}/>
         </div>
-
-        <FeedForm displayed={this.state.formDisplayed} onNewItem={this.onNewItem} />
-
+        <FeedForm displayed={this.state.formDisplayed} onNewItem={this.onNewItem}/>
         <br />
         <br />
-
-        <FeedList items={this.state.items} onVote={this.onVote} />
-
+        <FeedList items={this.state.items} onVote={this.onVote}/>
       </div>
     );
   }
