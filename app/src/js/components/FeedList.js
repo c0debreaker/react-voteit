@@ -6,7 +6,7 @@ var FeedList = React.createClass({
   render: function() {
 
     var feedItems = this.props.items.map(function(item) {
-      return <FeedItem key={item.id}
+      return <FeedItem key={item.key}
                        title={item.title}
                        desc={item.description}
                        voteCount={item.voteCount}

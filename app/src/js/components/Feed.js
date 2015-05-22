@@ -29,7 +29,7 @@ var Feed = React.createClass({
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: newItem.id
+      key: this.state.items.length
     });
   },
 
@@ -37,7 +37,8 @@ var Feed = React.createClass({
     console.log(item);
     var items = _.uniq(this.state.items);
     var index = _.findIndex(items, function(feedItems) {
-      return feedItems.key === item.key;
+      console.log(feedItems.key);
+      return feedItems.key;
     });
     var oldObj = items[index];
     var newItems = _.pull(items, oldObj);

@@ -30,7 +30,7 @@ var Feed = React.createClass({displayName: "Feed",
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: newItem.id
+      key: this.state.items.length
     });
   },
 
@@ -38,7 +38,8 @@ var Feed = React.createClass({displayName: "Feed",
     console.log(item);
     var items = _.uniq(this.state.items);
     var index = _.findIndex(items, function(feedItems) {
-      return feedItems.key === item.key;
+      console.log(feedItems.key);
+      return feedItems.key;
     });
     var oldObj = items[index];
     var newItems = _.pull(items, oldObj);
@@ -174,7 +175,7 @@ var FeedList = React.createClass({displayName: "FeedList",
   render: function() {
 
     var feedItems = this.props.items.map(function(item) {
-      return React.createElement(FeedItem, {key: item.id, 
+      return React.createElement(FeedItem, {key: item.key, 
                        title: item.title, 
                        desc: item.description, 
                        voteCount: item.voteCount, 
