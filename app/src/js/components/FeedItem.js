@@ -30,7 +30,7 @@ var FeedItem = React.createClass({
                                     'badge badge-danger';
 
     return (
-      <li className="list-group-item">
+      <li key={this.key} className="list-group-item">
         <span className={positiveNegativeClassName}>{this.props.voteCount}</span>
         <h4>{this.props.title}</h4>
         <span>{this.props.desc}</span>

@@ -149,7 +149,7 @@ var FeedItem = React.createClass({displayName: "FeedItem",
                                     'badge badge-danger';
 
     return (
-      React.createElement("li", {className: "list-group-item"}, 
+      React.createElement("li", {key: this.key, className: "list-group-item"}, 
         React.createElement("span", {className: positiveNegativeClassName}, this.props.voteCount), 
         React.createElement("h4", null, this.props.title), 
         React.createElement("span", null, this.props.desc), 
