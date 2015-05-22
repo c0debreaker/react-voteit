@@ -9,9 +9,9 @@ var Feed = React.createClass({displayName: "Feed",
 
   getInitialState: function() {
     var FEED_ITEMS = [
-      { key: '1', title: 'JavaScript is fun', description: 'Lexical scoping FTW', voteCount: 34},
-      { key: '2', title: 'Realtime data!', description: 'Firebase is cool', voteCount: 49 },
-      { key: '3', title: 'Coffee makes you awake', description: 'Drink responsibly', voteCount: 15},
+      {title: 'JavaScript is fun', description: 'Lexical scoping FTW', voteCount: 34},
+      {title: 'Realtime data!', description: 'Firebase is cool', voteCount: 49 },
+      {title: 'Coffee makes you awake', description: 'Drink responsibly', voteCount: 15},
     ];
     return {
       items: FEED_ITEMS,
@@ -124,7 +124,6 @@ var FeedItem = React.createClass({displayName: "FeedItem",
 
   vote: function(newCount) {
     this.props.onVote({
-      key: this.props.key,
       title: this.props.title,
       description: this.props.desc,
       voteCount: newCount
@@ -144,13 +143,13 @@ var FeedItem = React.createClass({displayName: "FeedItem",
   },
 
   render: function() {
-
+    console.log(this.props);
     var positiveNegativeClassName = this.props.voteCount >= 0 ?
                                     'badge badge-success' :
                                     'badge badge-danger';
 
     return (
-      React.createElement("li", {key: this.props.key, className: "list-group-item"}, 
+      React.createElement("li", {className: "list-group-item"}, 
         React.createElement("span", {className: positiveNegativeClassName}, this.props.voteCount), 
         React.createElement("h4", null, this.props.title), 
         React.createElement("span", null, this.props.desc), 
@@ -176,7 +175,7 @@ var FeedList = React.createClass({displayName: "FeedList",
   render: function() {
 
     var feedItems = this.props.items.map(function(item) {
-      return React.createElement(FeedItem, {key: item.key, 
+      return React.createElement(FeedItem, {key: item.id, 
                        title: item.title, 
                        desc: item.description, 
                        voteCount: item.voteCount, 
