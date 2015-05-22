@@ -30,12 +30,11 @@ var Feed = React.createClass({displayName: "Feed",
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: this.state.items.length
+      key: newItem.id
     });
   },
 
   onVote: function(item) {
-    console.log(item);
     var items = _.uniq(this.state.items);
     var index = _.findIndex(items, function(feedItems) {
       return feedItems.key === item.key;
@@ -124,6 +123,7 @@ var FeedItem = React.createClass({displayName: "FeedItem",
 
   vote: function(newCount) {
     this.props.onVote({
+      key: this.key,
       title: this.props.title,
       description: this.props.desc,
       voteCount: newCount

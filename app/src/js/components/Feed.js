@@ -29,12 +29,11 @@ var Feed = React.createClass({
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: this.state.items.length
+      key: newItem.id
     });
   },
 
   onVote: function(item) {
-    console.log(item);
     var items = _.uniq(this.state.items);
     var index = _.findIndex(items, function(feedItems) {
       return feedItems.key === item.key;
