@@ -10,21 +10,21 @@ var Feed = React.createClass({displayName: "Feed",
   getInitialState: function () {
     var FEED_ITEMS = [
       {
-        key: '1',
+        id: 1,
         title: 'JavaScript is fun',
         description: 'Lexical scoping FTW',
         voteCount: 34
       }, {
-        key: '2',
+        id: 2,
         title: 'Realtime data!',
         description: 'Firebase is cool',
         voteCount: 49
       }, {
-        key: '3',
+        id: 3,
         title: 'Coffee makes you awake',
         description: 'Drink responsibly',
         voteCount: 15
-      },
+      }
     ];
     return {
       items: FEED_ITEMS,
@@ -43,24 +43,43 @@ var Feed = React.createClass({displayName: "Feed",
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: this.state.items.length
+      id: this.state.items.length
     });
   },
 
-  onVote: function (item) {
+  onVote: function (newItem) {
+    // copy the original array.
     var items = _.uniq(this.state.items);
-    var index = _.findIndex(items, function (feedItems) {
-      return feedItems.key === item.key;
+    // Return the index of two matching objects.
+    var index = _.findIndex(items, function (feedItem) {
+      return feedItem.id === newItem.id;
     });
+    // store the old object in a var.
     var oldObj = items[index];
+    // pull the old object out of the copy array.
     var newItems = _.pull(items, oldObj);
-    newItems.push(item);
+    newItems.splice(index, 0, newItem);
     this.setState({
       items: newItems
     });
   },
 
+  sortByVotes: function () {
+    var feedItems = this.state.items;
+    feedItems.sort(function(a, b) {
+      if (a.voteCount < b.voteCount) {
+        return 1;
+      }
+      if (a.voteCount > b.voteCount) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+
   render: function () {
+    this.sortByVotes();
+
     return (
       React.createElement("div", null, 
         React.createElement("div", {className: "container"}, 
@@ -131,6 +150,7 @@ var FeedItem = React.createClass({displayName: "FeedItem",
 
   vote: function(newCount) {
     this.props.onVote({
+      id: this.props.id,
       title: this.props.title,
       description: this.props.desc,
       voteCount: newCount
@@ -153,9 +173,8 @@ var FeedItem = React.createClass({displayName: "FeedItem",
     var positiveNegativeClassName = this.props.voteCount >= 0 ?
                                     'badge badge-success' :
                                     'badge badge-danger';
-
     return (
-      React.createElement("li", {key: this.props.key, className: "list-group-item"}, 
+      React.createElement("li", {className: "list-group-item"}, 
         React.createElement("span", {className: positiveNegativeClassName}, this.props.voteCount), 
         React.createElement("h4", null, this.props.title), 
         React.createElement("span", null, this.props.desc), 
@@ -179,15 +198,15 @@ var React    = require('react'),
 var FeedList = React.createClass({displayName: "FeedList",
 
   render: function() {
-
+    var feedItems = this.props.items;
     var feedItems = this.props.items.map(function(item) {
-      return React.createElement(FeedItem, {key: item.key, 
+      return React.createElement(FeedItem, {id: item.id, 
+                       key: item.id, 
                        title: item.title, 
                        desc: item.description, 
                        voteCount: item.voteCount, 
                        onVote: this.props.onVote})
     }.bind(this));
-
     return (
       React.createElement("div", {className: "container"}, 
         React.createElement("ul", {className: "list-group"}, 

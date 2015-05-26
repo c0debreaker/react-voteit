@@ -9,21 +9,21 @@ var Feed = React.createClass({
   getInitialState: function () {
     var FEED_ITEMS = [
       {
-        key: '1',
+        id: 1,
         title: 'JavaScript is fun',
         description: 'Lexical scoping FTW',
         voteCount: 34
       }, {
-        key: '2',
+        id: 2,
         title: 'Realtime data!',
         description: 'Firebase is cool',
         voteCount: 49
       }, {
-        key: '3',
+        id: 3,
         title: 'Coffee makes you awake',
         description: 'Drink responsibly',
         voteCount: 15
-      },
+      }
     ];
     return {
       items: FEED_ITEMS,
@@ -42,24 +42,43 @@ var Feed = React.createClass({
     this.setState({
       items: newItems,
       formDisplayed: false,
-      key: this.state.items.length
+      id: this.state.items.length
     });
   },
 
-  onVote: function (item) {
+  onVote: function (newItem) {
+    // copy the original array.
     var items = _.uniq(this.state.items);
-    var index = _.findIndex(items, function (feedItems) {
-      return feedItems.key === item.key;
+    // Return the index of two matching objects.
+    var index = _.findIndex(items, function (feedItem) {
+      return feedItem.id === newItem.id;
     });
+    // store the old object in a var.
     var oldObj = items[index];
+    // pull the old object out of the copy array.
     var newItems = _.pull(items, oldObj);
-    newItems.push(item);
+    newItems.splice(index, 0, newItem);
     this.setState({
       items: newItems
     });
   },
 
+  sortByVotes: function () {
+    var feedItems = this.state.items;
+    feedItems.sort(function(a, b) {
+      if (a.voteCount < b.voteCount) {
+        return 1;
+      }
+      if (a.voteCount > b.voteCount) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+
   render: function () {
+    this.sortByVotes();
+
     return (
       <div>
         <div className="container">
