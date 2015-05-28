@@ -9,13 +9,13 @@ var Firebase = require('firebase');
 var Feed = React.createClass({displayName: "Feed",
 
   loadData: function () {
-    var ref = new Firebase('https://scorching-heat-1563.firebaseio.com/');
+    var ref = new Firebase('https://react-voteit.firebaseio.com/feed');
     ref.on('value', function(snap) {
       var items = [];
 
       snap.forEach(function(itemSnap) {
         var item = itemSnap.val();
-        item.key = itemSnap.name();
+        item.id = itemSnap.name();
         items.push(item);
       });
 
@@ -31,24 +31,7 @@ var Feed = React.createClass({displayName: "Feed",
   },
 
   getInitialState: function () {
-    var FEED_ITEMS = [
-      {
-        id: 1,
-        title: 'JavaScript is fun',
-        description: 'Lexical scoping FTW',
-        voteCount: 34
-      }, {
-        id: 2,
-        title: 'Realtime data!',
-        description: 'Firebase is cool',
-        voteCount: 49
-      }, {
-        id: 3,
-        title: 'Coffee makes you awake',
-        description: 'Drink responsibly',
-        voteCount: 15
-      }
-    ];
+    var FEED_ITEMS = [];
     return {
       items: FEED_ITEMS,
       formDisplayed: false
@@ -62,29 +45,33 @@ var Feed = React.createClass({displayName: "Feed",
   },
 
   onNewItem: function (newItem) {
-    var newItems = this.state.items.concat([newItem]);
-    this.setState({
-      items: newItems,
-      formDisplayed: false,
-      id: this.state.items.length
-    });
+    var ref = new Firebase('https://react-voteit.firebaseio.com/feed');
+    ref.push(newItem);
+    // var newItems = this.state.items.concat([newItem]);
+    // this.setState({
+    //   items: newItems,
+    //   formDisplayed: false,
+    //   id: this.state.items.length
+    // });
   },
 
   onVote: function (newItem) {
-    // copy the original array.
-    var items = _.uniq(this.state.items);
-    // Return the index of two matching objects.
-    var index = _.findIndex(items, function (feedItem) {
-      return feedItem.id === newItem.id;
-    });
-    // store the old object in a var.
-    var oldObj = items[index];
-    // pull the old object out of the copy array.
-    var newItems = _.pull(items, oldObj);
-    newItems.splice(index, 0, newItem);
-    this.setState({
-      items: newItems
-    });
+    var ref = new Firebase('https://react-voteit.firebaseio.com/feed').child(newItem.id);
+    ref.update(newItem);
+    // // copy the original array.
+    // var items = _.uniq(this.state.items);
+    // // Return the index of two matching objects.
+    // var index = _.findIndex(items, function (feedItem) {
+    //   return feedItem.id === newItem.id;
+    // });
+    // // store the old object in a var.
+    // var oldObj = items[index];
+    // // pull the old object out of the copy array.
+    // var newItems = _.pull(items, oldObj);
+    // newItems.splice(index, 0, newItem);
+    // this.setState({
+    //   items: newItems
+    // });
   },
 
   sortByVotes: function () {
