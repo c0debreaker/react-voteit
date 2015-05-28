@@ -3,8 +3,31 @@ var ShowAddButton = require('./ShowAddButton');
 var FeedForm = require('./FeedForm');
 var FeedList = require('./FeedList');
 var _ = require('lodash');
+var Firebase = require('firebase');
 
 var Feed = React.createClass({
+
+  loadData: function () {
+    var ref = new Firebase('https://scorching-heat-1563.firebaseio.com/');
+    ref.on('value', function(snap) {
+      var items = [];
+
+      snap.forEach(function(itemSnap) {
+        var item = itemSnap.val();
+        item.key = itemSnap.name();
+        items.push(item);
+      });
+
+      this.setState({
+        items: items
+      });
+
+    }.bind(this));
+  },
+
+  componentDidMount: function() {
+    this.loadData();
+  },
 
   getInitialState: function () {
     var FEED_ITEMS = [

@@ -17,9 +17,8 @@
     "gulp-open": "~0.3.2",
     "gulp-browserify": "~0.5.1",
     "reactify": "~1.1.1",
-    "lodash": "~3.9.1"
+    "lodash": "~3.9.1",
+    "firebase": "~2.2.5"
   },
-  "dependencies": {
-    "react-debug": "~1.0.0"
-  }
+  "dependencies": {}
 }
